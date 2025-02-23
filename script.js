@@ -197,7 +197,7 @@ function spinWheel() {
     }
 
     setTimeout(adjustTextSize, 50);
-} 
+}
 
 // 修改初始化函数
 function init() {
@@ -205,6 +205,23 @@ function init() {
     // 设置占位符属性
     cardElements.attributes.setAttribute('data-placeholder', '点击添加词条');
     cardElements.effects.setAttribute('data-placeholder', '点击添加特效');
+    
+    // 添加保存按钮
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
+    
+    const generateBtn = document.querySelector('button');
+    generateBtn.textContent = '生成新卡牌';
+    
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'save-btn';
+    saveBtn.textContent = '保存卡牌';
+    saveBtn.addEventListener('click', saveCardAsImage);
+    
+    buttonContainer.appendChild(generateBtn);
+    buttonContainer.appendChild(saveBtn);
+    
+    document.querySelector('.wheel').appendChild(buttonContainer);
 }
 
 // 修改更新逻辑
@@ -230,5 +247,29 @@ document.querySelector('button').addEventListener('click', () => {
         cardElements.effects.style.display = '';
     }, 0);
 });
+
+// 修改保存卡牌为图片的功能
+function saveCardAsImage() {
+    const card = document.getElementById('card');
+    
+    domtoimage.toPng(card, {
+        quality: 0.95,
+        width: card.offsetWidth * 2, // 提高分辨率
+        height: card.offsetHeight * 2,
+        style: {
+            transform: 'scale(2)',
+            transformOrigin: 'top left'
+        }
+    })
+    .then(dataUrl => {
+        const link = document.createElement('a');
+        link.download = 'card.png';
+        link.href = dataUrl;
+        link.click();
+    })
+    .catch(error => {
+        console.error('截图失败:', error);
+    });
+}
 
 window.onload = init;

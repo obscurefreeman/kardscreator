@@ -20,7 +20,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #676f52; /* 深绿色背景 */
 }
 
 .container {
@@ -41,6 +41,12 @@ body {
     background-image: url('assets/模板.png');
     background-size: cover;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .card img {
@@ -153,10 +159,32 @@ body {
     margin-top: 20px;
 }
 
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
 button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 16px;
     cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #2e7d32;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1b5e20;
+}
+
+button.save-btn {
+    background-color: #1565c0;
+}
+
+button.save-btn:hover {
+    background-color: #0d47a1;
 }
 
 .info-container {
