@@ -259,21 +259,6 @@ function spinWheel() {
     countryImage.style.zIndex = 2;
     unitTypeImage.style.zIndex = 2;
     unitDisplayContainer.style.zIndex = 1;
-
-    function adjustTextSize() {
-        const container = document.querySelector('.info-container');
-        const attributes = document.getElementById('attributes');
-        const effects = document.getElementById('effects');
-        
-        let fontSize = 16;
-        while ((attributes.scrollHeight + effects.scrollHeight + 10 > container.clientHeight) && fontSize > 10) {
-            fontSize--;
-            attributes.style.fontSize = `${fontSize}px`;
-            effects.style.fontSize = `${fontSize}px`;
-        }
-    }
-
-    setTimeout(adjustTextSize, 50);
 }
 
 // 修改初始化函数
