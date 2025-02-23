@@ -1,4 +1,3 @@
-// 获取所有DOM元素
 const cardElements = {
     cost: document.getElementById('cost'),
     fuel: document.getElementById('fuel'),
@@ -9,7 +8,6 @@ const cardElements = {
     effects: document.getElementById('effects')
 };
 
-// 数据配置
 const config = {
     attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', `重甲${getRandomInt(1, 3)}`, '收缴', '动员', '山地', `情报${getRandomInt(1, 3)}`, '流亡'],
     effects: {
@@ -59,7 +57,6 @@ const config = {
     }
 };
 
-// 公共名称池
 const commonPrefixes = [
     '急切的', '临近的', '坚决的', '荒谬的', '骇人听闻的', '燃烧的', '灼热的', '大笑的', '咳嗽的',
     '潜伏的', '打喷嚏', '失踪的', '抖动的', '抽搐的', '鸣叫的', '抽烟的', '柔软的', '温暖的',
@@ -81,7 +78,6 @@ const prefixes = {
     '轰炸机': commonPrefixes
 };
 
-// 工具函数
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -105,27 +101,23 @@ function generateRandomEffects() {
     if (count === 0) return '-';
     const effects = [];
     for (let i = 0; i < count; i++) {
-        // 获取随机属性词条（新增）
         const randomAttribute = getRandomElement(config.attributes.filter(a => !a.includes('${')));
 
-        // 获取随机条件和目标
         const condition = getRandomElement(config.effects.conditions);
         let conditionTarget = getRandomElement(config.effects.conditionTargets);
         let effectTarget = getRandomElement(config.effects.effectTargets);
         const effectSide = getRandomElement(config.effects.effectside);
         let effect = getRandomElement(config.effects.effects);
 
-        // 处理目标中的属性占位符（新增）
         conditionTarget = conditionTarget.replace(/{attributes}/g, randomAttribute);
         effectTarget = effectTarget.replace(/{attributes}/g, randomAttribute);
 
-        // 专业占位符替换
         effect = effect
             .replace(/{target}/g, effectTarget)
             .replace(/{side}/g, effectSide)
             .replace(/{conditionTargets}/g, conditionTarget)
             .replace(/{conditions}/g, condition)
-            .replace(/{attributes}/g, randomAttribute) // 新增属性替换
+            .replace(/{attributes}/g, randomAttribute)
             .replace(/{value}/g, getRandomInt(1,5));
 
         effects.push(effect);
@@ -139,14 +131,12 @@ function generateUnitName(unitType) {
 }
 
 function spinWheel() {
-    // 清除旧的单位展示容器
     const existingContainer = document.querySelector('.unit-display-container');
     if (existingContainer) {
         existingContainer.remove();
     }
     
-    // 生成随机数据
-    const unitType = getRandomElement(config.unitTypes);  // 先获取unitType
+    const unitType = getRandomElement(config.unitTypes);
     const country = getRandomElement(config.countries);
     const cardData = {
         country: country,
@@ -157,10 +147,9 @@ function spinWheel() {
         defense: getRandomInt(config.attackDefense.min, config.attackDefense.max),
         attributes: generateRandomAttributes(),
         effects: generateRandomEffects(),
-        unitName: generateUnitName(unitType)  // 使用已获取的unitType
+        unitName: generateUnitName(unitType)
     };
 
-    // 生成单位图片路径
     const getUnitImagePath = () => {
         const basePath = 'assets/image/';
         const typeFolder = config.unitImagePaths[cardData.unitType];
@@ -172,32 +161,26 @@ function spinWheel() {
             plane: 37
         };
         
-        // 获取当前类型的图片使用记录
         let usedImages = config.unitImageUsage[typeFolder];
         
-        // 如果所有图片都已使用过，重置记录
         if (usedImages.length >= imageCounts[typeFolder]) {
             usedImages = [];
             config.unitImageUsage[typeFolder] = [];
         }
         
-        // 获取未使用的图片
         let randomNum;
         do {
             randomNum = getRandomInt(1, imageCounts[typeFolder]);
         } while (usedImages.includes(randomNum));
         
-        // 记录已使用的图片
         usedImages.push(randomNum);
         config.unitImageUsage[typeFolder] = usedImages;
         
         return `${basePath}${typeFolder}/${randomNum}.jpg`;
     };
 
-    // 在cardData中添加unitImage属性
     cardData.unitImage = getUnitImagePath();
 
-    // 更新DOM
     const updateCard = (element, value) => {
         element.textContent = value === '-' ? '' : value;
         element.contentEditable = true;
@@ -216,15 +199,12 @@ function spinWheel() {
     document.getElementById('cost').textContent = cardData.cost;
     document.getElementById('fuel').textContent = cardData.fuel;
 
-    // 设置卡牌背景
     const card = document.getElementById('card');
     
-    // 设置单位展示容器
     const unitDisplayContainer = document.createElement('div');
     unitDisplayContainer.className = 'unit-display-container';
     card.insertBefore(unitDisplayContainer, card.firstChild);
 
-    // 设置单位展示图片
     const unitDisplay = document.createElement('img');
     unitDisplay.className = 'unit-display';
     unitDisplay.src = cardData.unitImage;
@@ -234,13 +214,11 @@ function spinWheel() {
     }
     unitDisplayContainer.appendChild(unitDisplay);
 
-    // 设置国家图标
     const countryImage = document.createElement('img');
     countryImage.src = `assets/${cardData.country}.png`;
-    countryImage.style.width = '100%'; // 图片填充整个卡片元素
+    countryImage.style.width = '100%';
     card.insertBefore(countryImage, card.firstChild);
 
-    // 如果是空军，添加空军图标
     if (cardData.unitType === '战斗机' || cardData.unitType === '轰炸机') {
         const airForceImage = document.createElement('img');
         airForceImage.src = `assets/${cardData.country}空军.png`;
@@ -249,26 +227,21 @@ function spinWheel() {
         card.insertBefore(airForceImage, card.firstChild);
     }
 
-    // 添加单位类型图标
     const unitTypeImage = document.createElement('img');
-    unitTypeImage.src = `assets/${cardData.unitType}.png`; // 根据单位类型获取图片
-    unitTypeImage.style.width = '100%'; // 图片填充整个卡片元素
+    unitTypeImage.src = `assets/${cardData.unitType}.png`;
+    unitTypeImage.style.width = '100%';
     card.insertBefore(unitTypeImage, card.firstChild);
 
-    // 设置层级关系
     countryImage.style.zIndex = 2;
     unitTypeImage.style.zIndex = 2;
     unitDisplayContainer.style.zIndex = 1;
 }
 
-// 修改初始化函数
 function init() {
     spinWheel();
-    // 设置占位符属性
     cardElements.attributes.setAttribute('data-placeholder', '点击添加词条');
     cardElements.effects.setAttribute('data-placeholder', '点击添加特效');
     
-    // 添加保存按钮
     const buttonContainer = document.createElement('div');
     buttonContainer.className = 'button-container';
     
@@ -286,30 +259,24 @@ function init() {
     document.querySelector('.wheel').appendChild(buttonContainer);
 
     const card = document.querySelector('.card');
-    // 移除旧的事件监听
     card.removeEventListener('mousemove', handleCardMove);
     card.removeEventListener('mouseleave', handleCardLeave);
-    // 添加优化后的事件监听
     card.addEventListener('mousemove', handleCardMove);
     card.addEventListener('mouseleave', handleCardLeave);
 }
 
-// 修改更新逻辑
 const updateCard = (element, value) => {
     element.textContent = value === '-' ? '' : value;
     element.contentEditable = true;
 };
 
-// 修改点击事件处理
 document.querySelector('button').addEventListener('click', () => {
-    // 清除旧图片
     const card = document.getElementById('card');
     const imgs = card.querySelectorAll('img:not([src="assets/模板.png"])');
     imgs.forEach(img => img.remove());
     
     spinWheel();
     
-    // 强制重排触发CSS更新
     cardElements.attributes.style.display = 'block';
     cardElements.effects.style.display = 'block';
     setTimeout(() => {
@@ -318,18 +285,15 @@ document.querySelector('button').addEventListener('click', () => {
     }, 0);
 });
 
-// 优化后的鼠标移动事件处理
 function handleCardMove(e) {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const centerX = rect.left + rect.width/2;
     const centerY = rect.top + rect.height/2;
     
-    // 使用更平滑的缓动计算
     const targetX = (e.clientX - centerX) / 25;
     const targetY = (e.clientY - centerY) / 25;
     
-    // 使用动画帧实现平滑过渡
     requestAnimationFrame(() => {
         card.style.transform = `
             perspective(1000px)
@@ -342,7 +306,6 @@ function handleCardMove(e) {
     });
 }
 
-// 优化后的鼠标离开事件
 function handleCardLeave() {
     requestAnimationFrame(() => {
         this.style.transform = `
@@ -355,13 +318,12 @@ function handleCardLeave() {
     });
 }
 
-// 修改保存卡牌为图片的功能
 function saveCardAsImage() {
     const card = document.getElementById('card');
     
     domtoimage.toPng(card, {
         quality: 0.95,
-        width: card.offsetWidth * 2, // 提高分辨率
+        width: card.offsetWidth * 2,
         height: card.offsetHeight * 2,
         style: {
             transform: 'scale(2)',
