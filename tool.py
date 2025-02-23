@@ -6,8 +6,8 @@ def crop_center_square(input_folder, output_folder):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # 计数器，用于命名输出文件
-    file_counter = 1
+    # 用于记录每个子文件夹的图片数量
+    image_count = {}
 
     # 遍历输入文件夹及其子文件夹中的所有文件
     for root, _, files in os.walk(input_folder):
@@ -16,6 +16,10 @@ def crop_center_square(input_folder, output_folder):
         output_subfolder = os.path.join(output_folder, relative_path)
         if not os.path.exists(output_subfolder):
             os.makedirs(output_subfolder)
+
+        # 计数器，用于命名输出文件
+        file_counter = 1
+        image_count[relative_path] = 0  # 初始化计数
 
         for filename in files:
             if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
@@ -41,12 +45,18 @@ def crop_center_square(input_folder, output_folder):
 
                     print(f'裁剪并保存: {output_path}')
                     file_counter += 1
+                    image_count[relative_path] += 1  # 更新计数
                 except Exception as e:
                     print(f'处理文件 {filename} 时出错: {e}')
             else:
                 print(f'跳过非图片文件: {filename}')
 
+    # 汇报每个子文件夹的图片数量
+    print("\n汇报：")
+    for folder, count in image_count.items():
+        print(f'子文件夹 "{folder}" 中有 {count} 张图片。')
+
 # 使用示例
-input_folder = 'assets/image/artillery'  # 输入文件夹路径
-output_folder = 'assets/imageoutput'  # 输出文件夹路径
+input_folder = 'src/assets/image/'  # 输入文件夹路径
+output_folder = 'assets/image/'  # 输出文件夹路径
 crop_center_square(input_folder, output_folder)
