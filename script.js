@@ -11,25 +11,30 @@ const cardElements = {
 
 // 数据配置
 const config = {
-    attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', '重甲', '收缴', '动员', '山地'],
+    attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', `重甲${getRandomInt(1, 3)}`, '收缴', '动员', '山地', `情报${getRandomInt(1, 3)}`, '流亡'],
     effects: {
-        conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时'],
-        conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位'],
+        conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时', '触发反制时'],
+        conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意受伤单位', `任意{attributes}单位`],
         effects: [
-            `使{target}获得+${getRandomInt(1, 5)}攻击`,
-            `使{target}获得+${getRandomInt(1, 5)}防御`,
-            `使{target}受到${getRandomInt(1, 5)}点伤害`,
-            `使{target}无法攻击`,
-            `使{target}无法攻击敌方总部`,
-            `使{target}获得守护`,
-            `使{target}受到的战斗伤害翻倍`,
-            `使{target}获得免疫`,
-            `使{target}与一个敌方单位战斗`,
-            `使{target}进入前线`,
-            `使$effectside抽+${getRandomInt(1, 5)}张牌`,
-            `结束该回合`
+            `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}攻击力`,
+            `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}防御力`,
+            `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)} +${getRandomInt(1, 5)}`,
+            `当{conditionTargets}{conditions}，对{target}造成${getRandomInt(1, 5)}点伤害`,
+            `当{conditionTargets}{conditions}，使{target}无法攻击`,
+            `当{conditionTargets}{conditions}，使{target}无法攻击敌方总部`,
+            `当{conditionTargets}{conditions}，使{target}获得守护`,
+            `当{conditionTargets}{conditions}，使{target}受到的战斗伤害翻倍`,
+            `当{conditionTargets}{conditions}，使{target}获得免疫`,
+            `当{conditionTargets}{conditions}，使{target}与一个敌方单位战斗`,
+            `当{conditionTargets}{conditions}，使{target}进入前线`,
+            `当{conditionTargets}{conditions}，使{target}返回其所有者手牌`,
+            `当{conditionTargets}{conditions}，使{target}也算做坦克`,
+            `当{conditionTargets}{conditions}，使{target}行动花费+${getRandomInt(1, 5)}`,
+            `当{conditionTargets}{conditions}，使{side}抽+${getRandomInt(1, 5)}张牌`,
+            `当{conditionTargets}{conditions}，使{side}总部获得+${getRandomInt(1, 5)}防御力`,
+            `当{conditionTargets}{conditions}，结束该回合`
         ],
-        effectTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位', '前线所有单位'],
+        effectTargets: ['自身', '指定单位', '相邻单位', '随机单位', '所有友方单位', '所有敌方单位', '所有前线单位', '所有受伤单位', `所有{attributes}单位`],
         effectside: ['友方', '敌方']
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
@@ -46,6 +51,28 @@ const config = {
         '战斗机': 'plane',
         '轰炸机': 'plane'
     }
+};
+
+// 公共名称池
+const commonPrefixes = [
+    '急切的', '临近的', '坚决的', '荒谬的', '骇人听闻的', '燃烧的', '灼热的', '大笑的', '咳嗽的',
+    '潜伏的', '打喷嚏', '失踪的', '抖动的', '抽搐的', '鸣叫的', '抽烟的', '柔软的', '温暖的',
+    '寒冷的', '冰冻的', '跳跃的', '哭泣的', '祈祷的', '玩耍的', '偷窃的', '摇摆的', '暗中的',
+    '聪明的', '松软的', '最好的', '高兴的', '黄金', '金制', '铁制', '木制', '铜制', '银制',
+    '红色', '深红', '橙色', '黑色', '粉色', '无能的', '湿润的', '沙漠', '复仇', '得意的', '魔法',
+    '幽灵', '隐藏的', '海王星', '阿瑞斯', '鹰', '傍晚', '清晨', '午餐', '酸性的', '皇后的', '国王的',
+    '力量', '治疗者', '健康', '恶心的', '肮脏的', '腐烂的', '飞行的', '爬行的', '离开的', '喊叫的',
+    '悲伤的', '第一', '第二', '第三', '最后', '致命', '可怕的', '不错的', '被冒犯的', '完美的',
+    '幸运的', '发臭的', '寂静的', '钢铁', '天使', '狂野的', '神秘的', '孤独的', '深邃', '阴影',
+    '迟钝的', '无用的', '快乐的', '旅行的'
+];
+
+const prefixes = {
+    '步兵': commonPrefixes,
+    '坦克': commonPrefixes,
+    '炮兵': commonPrefixes,
+    '战斗机': commonPrefixes,
+    '轰炸机': commonPrefixes
 };
 
 // 工具函数
@@ -72,40 +99,37 @@ function generateRandomEffects() {
     if (count === 0) return '-';
     const effects = [];
     for (let i = 0; i < count; i++) {
-        const conditionTemplate = getRandomElement(config.effects.conditions);
-        const condition = getRandomElement(config.effects.conditions.filter(c => !c.includes('condition')));
-        const conditionTarget = getRandomElement(config.effects.conditionTargets);
-        const effectTarget = getRandomElement(config.effects.effectTargets);
+        // 获取随机属性词条（新增）
+        const randomAttribute = getRandomElement(config.attributes.filter(a => !a.includes('${')));
+
+        // 获取随机条件和目标
+        const condition = getRandomElement(config.effects.conditions);
+        let conditionTarget = getRandomElement(config.effects.conditionTargets);
+        let effectTarget = getRandomElement(config.effects.effectTargets);
         const effectSide = getRandomElement(config.effects.effectside);
         let effect = getRandomElement(config.effects.effects);
+
+        // 处理目标中的属性占位符（新增）
+        conditionTarget = conditionTarget.replace(/{attributes}/g, randomAttribute);
+        effectTarget = effectTarget.replace(/{attributes}/g, randomAttribute);
 
         // 专业占位符替换
         effect = effect
             .replace(/{target}/g, effectTarget)
             .replace(/{side}/g, effectSide)
-            .replace(/{condition}/g, () => getRandomElement(config.effects.conditions))
-            .replace(/{conditionTarget}/g, conditionTarget)
+            .replace(/{conditionTargets}/g, conditionTarget)
+            .replace(/{conditions}/g, condition)
+            .replace(/{attributes}/g, randomAttribute) // 新增属性替换
             .replace(/{value}/g, getRandomInt(1,5));
 
-        // 处理条件模板
-        const finalCondition = conditionTemplate
-            .replace('{conditionTarget}', conditionTarget)
-            .replace('{condition}', condition);
-
-        effects.push(`${finalCondition}，${effect}`);
+        effects.push(effect);
     }
     return effects.join('；');
 }
 
 function generateUnitName(unitType) {
-    const prefixes = {
-        '步兵': ['突击队', '山地', '空降', '机械化', '伞兵', '近卫', '掷弹兵', '装甲掷弹兵', '山地猎兵团', '空降猎兵团', '装甲', '摩托化'],
-        '坦克': ['虎式', 'T-34', '谢尔曼', '潘兴', '丘吉尔', '豹式', 'KV-1', 'IS-2', '克伦威尔', '瓦伦丁', '四号坦克', '三号突击炮', 'SU-76', 'M3斯图亚特', 'M24霞飞'],
-        '炮兵': ['榴弹炮', '加农炮', '反坦克炮', '高射炮', '88炮', '喀秋莎', 'M2榴弹炮', 'ML-20', 'M7牧师'],
-        '战斗机': ['喷火式', 'BF-109', 'P-51', '零式', '拉-5', 'Fw-190', 'P-47', '雅克-3', 'F4U海盗', 'P-38闪电', 'Ki-84疾风', 'Me-262', 'He-162', 'Ta-152', 'I-16'],
-        '轰炸机': ['B-17', '兰开斯特', '斯图卡', '伊尔-2', 'B-29', 'B-24解放者', 'He-111', 'Ju-88', 'Pe-2', 'A-20浩劫', 'B-25米切尔', 'Do-17', 'SM.79', 'G4M一式陆攻', 'Tu-2']
-    };
-    return `${getRandomElement(prefixes[unitType])} ${unitType}`;
+    const unitPrefix = getRandomElement(prefixes[unitType]);
+    return `${unitPrefix}${unitType}`;
 }
 
 function spinWheel() {
