@@ -16,16 +16,16 @@ const config = {
         conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时'],
         conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位'],
         effects: [
-            `使$effectTargets获得+${getRandomInt(1, 5)}攻击`,
-            `使$effectTargets获得+${getRandomInt(1, 5)}防御`,
-            `使$effectTargets受到${getRandomInt(1, 5)}点伤害`,
-            `使$effectTargets无法攻击`,
-            `使$effectTargets无法攻击敌方总部`,
-            `使$effectTargets获得守护`,
-            `使$effectTargets受到的战斗伤害翻倍`,
-            `使$effectTargets获得免疫`,
-            `使$effectTargets与一个敌方单位战斗`,
-            `使$effectTargets进入前线`,
+            `使{target}获得+${getRandomInt(1, 5)}攻击`,
+            `使{target}获得+${getRandomInt(1, 5)}防御`,
+            `使{target}受到${getRandomInt(1, 5)}点伤害`,
+            `使{target}无法攻击`,
+            `使{target}无法攻击敌方总部`,
+            `使{target}获得守护`,
+            `使{target}受到的战斗伤害翻倍`,
+            `使{target}获得免疫`,
+            `使{target}与一个敌方单位战斗`,
+            `使{target}进入前线`,
             `使$effectside抽+${getRandomInt(1, 5)}张牌`,
             `结束该回合`
         ],
@@ -72,18 +72,27 @@ function generateRandomEffects() {
     if (count === 0) return '-';
     const effects = [];
     for (let i = 0; i < count; i++) {
-        const condition = getRandomElement(config.effects.conditions);
+        const conditionTemplate = getRandomElement(config.effects.conditions);
+        const condition = getRandomElement(config.effects.conditions.filter(c => !c.includes('condition')));
         const conditionTarget = getRandomElement(config.effects.conditionTargets);
-        let effect = getRandomElement(config.effects.effects);
         const effectTarget = getRandomElement(config.effects.effectTargets);
         const effectSide = getRandomElement(config.effects.effectside);
-        
-        // 替换变量占位符
-        effect = effect
-            .replace(/\$effectTargets/g, effectTarget)
-            .replace(/\$effectside/g, effectSide);
+        let effect = getRandomElement(config.effects.effects);
 
-        effects.push(`当${conditionTarget}${condition}，${effect}`);
+        // 专业占位符替换
+        effect = effect
+            .replace(/{target}/g, effectTarget)
+            .replace(/{side}/g, effectSide)
+            .replace(/{condition}/g, () => getRandomElement(config.effects.conditions))
+            .replace(/{conditionTarget}/g, conditionTarget)
+            .replace(/{value}/g, getRandomInt(1,5));
+
+        // 处理条件模板
+        const finalCondition = conditionTemplate
+            .replace('{conditionTarget}', conditionTarget)
+            .replace('{condition}', condition);
+
+        effects.push(`${finalCondition}，${effect}`);
     }
     return effects.join('；');
 }
