@@ -30,7 +30,7 @@ const config = {
             `当{conditionTargets}{conditions}，使{target}返回其所有者手牌`,
             `当{conditionTargets}{conditions}，使{target}也算做坦克`,
             `当{conditionTargets}{conditions}，使{target}行动花费+${getRandomInt(1, 5)}`,
-            `当{conditionTargets}{conditions}，使{side}抽+${getRandomInt(1, 5)}张牌`,
+            `当{conditionTargets}{conditions}，使{side}抽${getRandomInt(1, 5)}张牌`,
             `当{conditionTargets}{conditions}，使{side}总部获得+${getRandomInt(1, 5)}防御力`,
             `当{conditionTargets}{conditions}，结束该回合`
         ],
@@ -276,6 +276,14 @@ function init() {
     buttonContainer.appendChild(saveBtn);
     
     document.querySelector('.wheel').appendChild(buttonContainer);
+
+    const card = document.querySelector('.card');
+    // 移除旧的事件监听
+    card.removeEventListener('mousemove', handleCardMove);
+    card.removeEventListener('mouseleave', handleCardLeave);
+    // 添加优化后的事件监听
+    card.addEventListener('mousemove', handleCardMove);
+    card.addEventListener('mouseleave', handleCardLeave);
 }
 
 // 修改更新逻辑
@@ -301,6 +309,43 @@ document.querySelector('button').addEventListener('click', () => {
         cardElements.effects.style.display = '';
     }, 0);
 });
+
+// 优化后的鼠标移动事件处理
+function handleCardMove(e) {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width/2;
+    const centerY = rect.top + rect.height/2;
+    
+    // 使用更平滑的缓动计算
+    const targetX = (e.clientX - centerX) / 25;
+    const targetY = (e.clientY - centerY) / 25;
+    
+    // 使用动画帧实现平滑过渡
+    requestAnimationFrame(() => {
+        card.style.transform = `
+            perspective(1000px)
+            rotateX(${-targetY * 0.6}deg)
+            rotateY(${targetX * 0.6}deg)
+            scale(1.02)
+            translateZ(10px)`;
+        card.style.boxShadow = `
+            ${targetX * 3}px ${targetY * 3}px 30px rgba(0, 0, 0, 0.2)`;
+    });
+}
+
+// 优化后的鼠标离开事件
+function handleCardLeave() {
+    requestAnimationFrame(() => {
+        this.style.transform = `
+            perspective(1000px)
+            rotateX(0)
+            rotateY(0)
+            scale(1)
+            translateZ(0)`;
+        this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    });
+}
 
 // 修改保存卡牌为图片的功能
 function saveCardAsImage() {

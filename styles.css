@@ -41,12 +41,12 @@ body {
     background-image: url('assets/模板.png');
     background-size: cover;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    transform-style: preserve-3d;
+    transition: 
+        transform 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+        box-shadow 0.6s ease;
+    backface-visibility: hidden;
+    will-change: transform, box-shadow;
 }
 
 .card img {
