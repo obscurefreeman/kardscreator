@@ -103,7 +103,8 @@ function spinWheel() {
     updateCard(cardElements.effects, cardData.effects);
     
     document.querySelector('.card h2').textContent = cardData.unitName;
-    document.querySelector('.cost-fuel').innerHTML = `${cardData.cost} <br> ${cardData.fuel}`;
+    document.getElementById('cost').textContent = cardData.cost;
+    document.getElementById('fuel').textContent = cardData.fuel;
 
     // 设置卡牌背景
     const card = document.getElementById('card');
@@ -127,6 +128,21 @@ function spinWheel() {
     unitTypeImage.src = `assets/${cardData.unitType}.png`; // 根据单位类型获取图片
     unitTypeImage.style.width = '100%'; // 图片填充整个卡片元素
     card.appendChild(unitTypeImage);
+
+    function adjustTextSize() {
+        const container = document.querySelector('.info-container');
+        const attributes = document.getElementById('attributes');
+        const effects = document.getElementById('effects');
+        
+        let fontSize = 16;
+        while ((attributes.scrollHeight + effects.scrollHeight + 10 > container.clientHeight) && fontSize > 10) {
+            fontSize--;
+            attributes.style.fontSize = `${fontSize}px`;
+            effects.style.fontSize = `${fontSize}px`;
+        }
+    }
+
+    setTimeout(adjustTextSize, 50);
 } 
 
 // 初始化

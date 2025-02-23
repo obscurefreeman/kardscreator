@@ -62,35 +62,56 @@ body {
 
 .card .cost-fuel {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 18px;
-    font-weight: bold;
+    top: 30px;
+    left: 30px;
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
     z-index: 2;
     font-family: 'Kards数字复合字体', sans-serif;
 }
 
-.card .card-image {
+.cost-value {
+    font-size: 50px;
+    line-height: 1;
+    color: #bec1af;
+}
+
+.fuel-value {
+    font-size: 25px;
+    line-height: 1;
+    color: #bec1af;
     position: relative;
-    width: 100%;
-    height: 450px;
-    background-color: #ddd;
-    margin: 60px 0;
-    border-radius: 10px;
+    top: -2px;
 }
 
 .card .unit-stats {
     position: absolute;
-    bottom: 10px;
-    left: 50%; /* 居中 */
-    transform: translateX(-50%); /* 居中对齐 */
-    color: white;
+    bottom: 165px;
+    left: 0;
+    right: 0;
     display: flex;
-    font-family: 'Kards数字复合字体', sans-serif;
-    font-size: 40px;
-    justify-content: center;
-    gap: 220px; /* 调整数字间距 */
+    justify-content: space-between;
     z-index: 3;
+}
+
+.card .unit-stats .attack,
+.card .unit-stats .defense {
+    position: absolute;
+    bottom: 0;
+    width: 120px;
+    text-align: center;
+    font-size: 40px;
+    color: #c8cdbb;
+    font-family: 'Kards数字复合字体', sans-serif;
+}
+
+.card .unit-stats .attack {
+    left: 75px;
+}
+
+.card .unit-stats .defense {
+    right: 75px;
 }
 
 .card .unit-stats .unit-name {
@@ -102,8 +123,7 @@ body {
 }
 
 .card .unit-type {
-    position: absolute;
-    bottom: 10px;
+    display: none;
     left: 50%;
     transform: translateX(-50%);
     font-size: 18px;
@@ -135,4 +155,29 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+}
+
+.info-container {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.attributes, .effects {
+    margin: 2px 0;
+    font-size: 16px;
+    line-height: 1.3;
+    text-align: center;
+    flex-shrink: 0;
+    transition: font-size 0.3s;
+    word-break: break-all;
+    color: #4e4e49;
+    max-width: 90%;
 }
