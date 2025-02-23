@@ -136,6 +136,7 @@ body {
     margin: 10px 0;
     font-size: 20px;
     color: #4e4e49;
+    font-weight: bold;
     font-family: 'Kards文字复合字体Bold', sans-serif;
 }
 
@@ -180,4 +181,14 @@ button {
     word-break: break-all;
     color: #4e4e49;
     max-width: 90%;
+}
+
+.attributes[value="-"], 
+.effects[value="-"] {
+    display: none;
+}
+
+.info-container:has(.attributes:not([value="-"])):has(.effects[value="-"]) .attributes,
+.info-container:has(.effects:not([value="-"])):has(.attributes[value="-"]) .effects {
+    margin: auto;
 }

@@ -21,7 +21,7 @@ const config = {
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
     unitTypes: ['步兵', '坦克', '炮兵', '战斗机', '轰炸机'],
-    cost: { min: 1, max: 10 },
+    cost: { min: 1, max: 9 },
     fuel: { min: 0, max: 5 },
     attackDefense: { min: 1, max: 12 },
     attributesCount: { min: 0, max: 3 },
@@ -145,5 +145,27 @@ function spinWheel() {
     setTimeout(adjustTextSize, 50);
 } 
 
-// 初始化
-document.querySelector('button').addEventListener('click', spinWheel);
+// 在文件末尾添加初始化函数
+function init() {
+    spinWheel();
+    // 自动隐藏空内容
+    [cardElements.attributes, cardElements.effects].forEach(el => {
+        if (el.textContent === '-') el.style.display = 'none';
+    });
+}
+
+// 修改初始化部分
+document.addEventListener('DOMContentLoaded', init);
+document.querySelector('button').addEventListener('click', () => {
+    // 清除旧图片
+    const card = document.getElementById('card');
+    const imgs = card.querySelectorAll('img:not([src="assets/模板.png"])');
+    imgs.forEach(img => img.remove());
+    
+    spinWheel();
+    
+    // 重置显示状态
+    [cardElements.attributes, cardElements.effects].forEach(el => {
+        el.style.display = el.textContent === '-' ? 'none' : 'block';
+    });
+});
