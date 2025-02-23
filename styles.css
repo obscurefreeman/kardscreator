@@ -76,7 +76,7 @@ body {
     display: flex;
     align-items: flex-end;
     gap: 5px;
-    z-index: 2;
+    z-index: 4;
     font-family: 'Kards数字复合字体', sans-serif;
 }
 
@@ -274,4 +274,13 @@ button:active {
 /* 确保现有图片层级更高 */
 .card img:not(.unit-display) {
     z-index: 2;
+}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    pointer-events: none;
 }

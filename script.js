@@ -24,11 +24,11 @@ const config = {
             `当{conditionTargets}{conditions}，使{target}无法攻击敌方总部`,
             `当{conditionTargets}{conditions}，使{target}获得守护`,
             `当{conditionTargets}{conditions}，使{target}受到的战斗伤害翻倍`,
-            `当{conditionTargets}{conditions}，使{target}获得免疫`,
             `当{conditionTargets}{conditions}，使{target}与一个敌方单位战斗`,
             `当{conditionTargets}{conditions}，使{target}进入前线`,
             `当{conditionTargets}{conditions}，使{target}返回其所有者手牌`,
             `当{conditionTargets}{conditions}，使{target}也算做坦克`,
+            `当{conditionTargets}{conditions}，使{target}获得{attributes}`,
             `当{conditionTargets}{conditions}，使{target}行动花费+${getRandomInt(1, 5)}`,
             `当{conditionTargets}{conditions}，使{side}抽${getRandomInt(1, 5)}张牌`,
             `当{conditionTargets}{conditions}，使{side}总部获得+${getRandomInt(1, 5)}防御力`,
@@ -50,6 +50,12 @@ const config = {
         '炮兵': 'artillery',
         '战斗机': 'plane',
         '轰炸机': 'plane'
+    },
+    unitImageUsage: {
+        infantry: [],
+        tank: [],
+        artillery: [],
+        plane: []
     }
 };
 
@@ -159,7 +165,6 @@ function spinWheel() {
         const basePath = 'assets/image/';
         const typeFolder = config.unitImagePaths[cardData.unitType];
         
-        // 获取对应类型的图片数量（假设图片命名为1.jpg, 2.jpg...）
         const imageCounts = {
             infantry: 87,
             tank: 27,
@@ -167,7 +172,25 @@ function spinWheel() {
             plane: 37
         };
         
-        const randomNum = getRandomInt(1, imageCounts[typeFolder]);
+        // 获取当前类型的图片使用记录
+        let usedImages = config.unitImageUsage[typeFolder];
+        
+        // 如果所有图片都已使用过，重置记录
+        if (usedImages.length >= imageCounts[typeFolder]) {
+            usedImages = [];
+            config.unitImageUsage[typeFolder] = [];
+        }
+        
+        // 获取未使用的图片
+        let randomNum;
+        do {
+            randomNum = getRandomInt(1, imageCounts[typeFolder]);
+        } while (usedImages.includes(randomNum));
+        
+        // 记录已使用的图片
+        usedImages.push(randomNum);
+        config.unitImageUsage[typeFolder] = usedImages;
+        
         return `${basePath}${typeFolder}/${randomNum}.jpg`;
     };
 
