@@ -14,10 +14,10 @@ const cardElements = {
 const config = {
     attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', '重甲', '收缴', '动员', '山地'],
     effects: {
-        conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被摧毁时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时'],
-        conditionTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位'],
-        effects: ['造成2点伤害', '获得+2攻击', '获得+2防御', '抽一张牌', '无法攻击', '无法移动', '无法攻击敌方总部', '获得守护', '受到的战斗伤害翻倍', '获得免疫'],
-        effectTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位']
+        conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时'],
+        conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位'],
+        effects: [`造成${getRandomInt(1, 5)}点伤害`, `获得+${getRandomInt(1, 5)}攻击`, `获得+${getRandomInt(1, 5)}防御`, '无法攻击', '无法移动', '无法攻击敌方总部', '获得守护', '受到的战斗伤害翻倍', '获得免疫', '获得免疫', '与一个敌方单位战斗', '进入前线', '结束该回合', '抽一张牌'],
+        effectTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位', '前线所有单位']
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
     unitTypes: ['步兵', '坦克', '炮兵', '战斗机', '轰炸机'],
@@ -40,11 +40,11 @@ function getRandomElement(array) {
 function generateRandomAttributes() {
     const count = getRandomInt(config.attributesCount.min, config.attributesCount.max);
     if (count === 0) return '-';
-    const attributes = [];
-    for (let i = 0; i < count; i++) {
-        attributes.push(getRandomElement(config.attributes));
+    const attributes = new Set();
+    while (attributes.size < count) {
+        attributes.add(getRandomElement(config.attributes));
     }
-    return attributes.join(', ');
+    return Array.from(attributes).join(', ');
 }
 
 function generateRandomEffects() {
@@ -90,7 +90,8 @@ function spinWheel() {
 
     // 更新DOM
     const updateCard = (element, value) => {
-        element.textContent = value;  // 移除label
+        element.textContent = value === '-' ? '' : value;
+        element.contentEditable = true;
     };
 
     updateCard(cardElements.country, cardData.country);
@@ -103,6 +104,7 @@ function spinWheel() {
     updateCard(cardElements.effects, cardData.effects);
     
     document.querySelector('.card h2').textContent = cardData.unitName;
+    document.querySelector('.card h2').style.color = cardData.country === '芬兰' ? '#0a0a0f' : '#bfc4af';
     document.getElementById('cost').textContent = cardData.cost;
     document.getElementById('fuel').textContent = cardData.fuel;
 
@@ -145,17 +147,21 @@ function spinWheel() {
     setTimeout(adjustTextSize, 50);
 } 
 
-// 在文件末尾添加初始化函数
+// 修改初始化函数
 function init() {
     spinWheel();
-    // 自动隐藏空内容
-    [cardElements.attributes, cardElements.effects].forEach(el => {
-        if (el.textContent === '-') el.style.display = 'none';
-    });
+    // 设置占位符属性
+    cardElements.attributes.setAttribute('data-placeholder', '点击添加词条');
+    cardElements.effects.setAttribute('data-placeholder', '点击添加特效');
 }
 
-// 修改初始化部分
-document.addEventListener('DOMContentLoaded', init);
+// 修改更新逻辑
+const updateCard = (element, value) => {
+    element.textContent = value === '-' ? '' : value;
+    element.contentEditable = true;
+};
+
+// 修改点击事件处理
 document.querySelector('button').addEventListener('click', () => {
     // 清除旧图片
     const card = document.getElementById('card');
@@ -164,8 +170,13 @@ document.querySelector('button').addEventListener('click', () => {
     
     spinWheel();
     
-    // 重置显示状态
-    [cardElements.attributes, cardElements.effects].forEach(el => {
-        el.style.display = el.textContent === '-' ? 'none' : 'block';
-    });
+    // 强制重排触发CSS更新
+    cardElements.attributes.style.display = 'block';
+    cardElements.effects.style.display = 'block';
+    setTimeout(() => {
+        cardElements.attributes.style.display = '';
+        cardElements.effects.style.display = '';
+    }, 0);
 });
+
+window.onload = init;

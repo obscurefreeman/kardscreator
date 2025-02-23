@@ -58,6 +58,7 @@ body {
     position: relative;
     z-index: 2;
     font-family: 'Kards文字复合字体Bold', sans-serif;
+    color: #bec1af;
 }
 
 .card .cost-fuel {
@@ -169,6 +170,7 @@ button {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    z-index: 3;
 }
 
 .attributes, .effects {
@@ -181,14 +183,24 @@ button {
     word-break: break-all;
     color: #4e4e49;
     max-width: 90%;
+    min-height: 20px;
+    border-bottom: 1px dashed #ccc;
+    position: relative;
+    z-index: 4;
 }
 
-.attributes[value="-"], 
-.effects[value="-"] {
+.attributes:not(:focus):empty, 
+.effects:not(:focus):empty {
     display: none;
 }
 
-.info-container:has(.attributes:not([value="-"])):has(.effects[value="-"]) .attributes,
-.info-container:has(.effects:not([value="-"])):has(.attributes[value="-"]) .effects {
-    margin: auto;
+[contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: #999;
+    font-style: italic;
+}
+
+[contenteditable="true"]:focus {
+    outline: 2px solid #4a90e2;
+    background: rgba(74, 144, 226, 0.1);
 }
