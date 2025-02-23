@@ -75,8 +75,9 @@ function generateUnitName(unitType) {
 function spinWheel() {
     // 生成随机数据
     const unitType = getRandomElement(config.unitTypes);  // 先获取unitType
+    const country = getRandomElement(config.countries);
     const cardData = {
-        country: getRandomElement(config.countries),
+        country: country,
         cost: getRandomInt(config.cost.min, config.cost.max),
         fuel: getRandomInt(config.fuel.min, config.fuel.max),
         unitType: unitType,
@@ -103,7 +104,24 @@ function spinWheel() {
     
     document.querySelector('.card h2').textContent = cardData.unitName;
     document.querySelector('.cost-fuel').innerHTML = `${cardData.cost} <br> ${cardData.fuel}`;
-}
+
+    // 设置卡牌背景
+    const card = document.getElementById('card');
+    
+    // 设置国家图标
+    const countryImage = document.createElement('img');
+    countryImage.src = `assets/${cardData.country}.png`;
+    countryImage.style.width = '100%'; // 图片填充整个卡片元素
+    card.appendChild(countryImage);
+
+    // 如果是空军，添加空军图标
+    if (cardData.unitType === '战斗机' || cardData.unitType === '轰炸机') {
+        const airForceImage = document.createElement('img');
+        airForceImage.src = `assets/${cardData.country}空军.png`;
+        airForceImage.style.width = '100%'; // 图片填充整个卡片元素
+        card.appendChild(airForceImage);
+    }
+} 
 
 // 初始化
 document.querySelector('button').addEventListener('click', spinWheel);

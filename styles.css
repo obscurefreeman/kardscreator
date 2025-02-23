@@ -1,5 +1,20 @@
+@font-face {
+    font-family: 'Kards数字复合字体';
+    src: url('fonts/Kards数字复合字体.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Kards文字复合字体Bold';
+    src: url('fonts/Kards文字复合字体Bold.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Kards文字复合字体Regular';
+    src: url('fonts/Kards文字复合字体Regular.ttf') format('ttf');
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Kards文字复合字体Regular', Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,12 +38,26 @@ body {
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
+    background-image: url('assets/模板.png');
+    background-size: cover;
+    overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .card h2 {
     text-align: center;
     font-weight: bold;
     margin: 0 0 10px 0;
+    position: relative;
+    z-index: 2;
+    font-family: 'Kards文字复合字体Bold', sans-serif;
 }
 
 .card .cost-fuel {
@@ -37,14 +66,16 @@ body {
     left: 20px;
     font-size: 18px;
     font-weight: bold;
+    z-index: 2;
+    font-family: 'Kards数字复合字体', sans-serif;
 }
 
 .card .card-image {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 450px;
     background-color: #ddd;
-    margin: 10px 0;
+    margin: 60px 0;
     border-radius: 10px;
 }
 
@@ -58,6 +89,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     left: 0;
+    font-family: 'Kards数字复合字体', sans-serif;
 }
 
 .card .unit-type {
@@ -67,20 +99,23 @@ body {
     transform: translateX(-50%);
     font-size: 18px;
     font-weight: bold;
+    font-family: 'Kards数字复合字体', sans-serif;
 }
 
 .card .attributes {
     text-align: center;
-    font-weight: bold;
     margin: 10px 0;
-    font-size: 16px;
+    font-size: 20px;
+    color: #4e4e49;
+    font-family: 'Kards文字复合字体Bold', sans-serif;
 }
 
 .card .effects {
     text-align: center;
-    font-size: 14px;
-    color: #666;
+    font-size: 20px;
+    color: #0a0a0f;
     margin-top: 5px;
+    font-family: 'Kards数字复合字体', sans-serif;
 }
 
 .wheel {
