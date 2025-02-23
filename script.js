@@ -15,7 +15,7 @@ const config = {
     effects: {
         conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时'],
         conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位'],
-        effects: [`造成${getRandomInt(1, 5)}点伤害`, `获得+${getRandomInt(1, 5)}攻击`, `获得+${getRandomInt(1, 5)}防御`, '无法攻击', '无法移动', '无法攻击敌方总部', '获得守护', '受到的战斗伤害翻倍', '获得免疫', '获得免疫', '与一个敌方单位战斗', '进入前线', '结束该回合', '抽一张牌'],
+        effects: [`造成${getRandomInt(1, 5)}点伤害`, `获得+${getRandomInt(1, 5)}攻击`, `获得+${getRandomInt(1, 5)}防御`, '无法攻击', '无法攻击敌方总部', '获得守护', '受到的战斗伤害翻倍', '获得免疫', '获得免疫', '与一个敌方单位战斗', '进入前线', '结束该回合', '抽一张牌'],
         effectTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位', '前线所有单位']
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
@@ -24,7 +24,14 @@ const config = {
     fuel: { min: 0, max: 5 },
     attackDefense: { min: 1, max: 12 },
     attributesCount: { min: 0, max: 3 },
-    effectsCount: { min: 0, max: 2 }
+    effectsCount: { min: 0, max: 2 },
+    unitImagePaths: {
+        '步兵': 'infantry',
+        '坦克': 'tank',
+        '炮兵': 'artillery',
+        '战斗机': 'plane',
+        '轰炸机': 'plane'
+    }
 };
 
 // 工具函数
@@ -72,6 +79,12 @@ function generateUnitName(unitType) {
 }
 
 function spinWheel() {
+    // 清除旧的单位展示容器
+    const existingContainer = document.querySelector('.unit-display-container');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+    
     // 生成随机数据
     const unitType = getRandomElement(config.unitTypes);  // 先获取unitType
     const country = getRandomElement(config.countries);
@@ -86,6 +99,26 @@ function spinWheel() {
         effects: generateRandomEffects(),
         unitName: generateUnitName(unitType)  // 使用已获取的unitType
     };
+
+    // 生成单位图片路径
+    const getUnitImagePath = () => {
+        const basePath = 'assets/image/';
+        const typeFolder = config.unitImagePaths[cardData.unitType];
+        
+        // 获取对应类型的图片数量（假设图片命名为1.jpg, 2.jpg...）
+        const imageCounts = {
+            infantry: 86,
+            tank: 18,
+            artillery: 4,
+            plane: 23
+        };
+        
+        const randomNum = getRandomInt(1, imageCounts[typeFolder]);
+        return `${basePath}${typeFolder}/${randomNum}.jpg`;
+    };
+
+    // 在cardData中添加unitImage属性
+    cardData.unitImage = getUnitImagePath();
 
     // 更新DOM
     const updateCard = (element, value) => {
@@ -109,25 +142,46 @@ function spinWheel() {
     // 设置卡牌背景
     const card = document.getElementById('card');
     
+    // 设置单位展示容器
+    const unitDisplayContainer = document.createElement('div');
+    unitDisplayContainer.className = 'unit-display-container';
+    card.insertBefore(unitDisplayContainer, card.firstChild);
+
+    // 设置单位展示图片
+    const unitDisplay = document.createElement('img');
+    unitDisplay.className = 'unit-display';
+    unitDisplay.src = cardData.unitImage;
+    unitDisplay.onerror = function() {
+        this.src = '';
+        console.error('图片加载失败:', cardData.unitImage);
+    }
+    unitDisplayContainer.appendChild(unitDisplay);
+
     // 设置国家图标
     const countryImage = document.createElement('img');
     countryImage.src = `assets/${cardData.country}.png`;
     countryImage.style.width = '100%'; // 图片填充整个卡片元素
-    card.appendChild(countryImage);
+    card.insertBefore(countryImage, card.firstChild);
 
     // 如果是空军，添加空军图标
     if (cardData.unitType === '战斗机' || cardData.unitType === '轰炸机') {
         const airForceImage = document.createElement('img');
         airForceImage.src = `assets/${cardData.country}空军.png`;
-        airForceImage.style.width = '100%'; // 图片填充整个卡片元素
-        card.appendChild(airForceImage);
+        airForceImage.style.width = '100%';
+        airForceImage.style.zIndex = 2;
+        card.insertBefore(airForceImage, card.firstChild);
     }
 
     // 添加单位类型图标
     const unitTypeImage = document.createElement('img');
     unitTypeImage.src = `assets/${cardData.unitType}.png`; // 根据单位类型获取图片
     unitTypeImage.style.width = '100%'; // 图片填充整个卡片元素
-    card.appendChild(unitTypeImage);
+    card.insertBefore(unitTypeImage, card.firstChild);
+
+    // 设置层级关系
+    countryImage.style.zIndex = 2;
+    unitTypeImage.style.zIndex = 2;
+    unitDisplayContainer.style.zIndex = 1;
 
     function adjustTextSize() {
         const container = document.querySelector('.info-container');
