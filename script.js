@@ -161,10 +161,10 @@ function spinWheel() {
         
         // 获取对应类型的图片数量（假设图片命名为1.jpg, 2.jpg...）
         const imageCounts = {
-            infantry: 86,
-            tank: 18,
-            artillery: 4,
-            plane: 23
+            infantry: 87,
+            tank: 27,
+            artillery: 11,
+            plane: 37
         };
         
         const randomNum = getRandomInt(1, imageCounts[typeFolder]);

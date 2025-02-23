@@ -6,8 +6,9 @@ def crop_center_square(input_folder, output_folder):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # 用于记录每个子文件夹的图片数量
+    # 用于记录每个子文件夹的图片数量和错误文件
     image_count = {}
+    error_files = {}  # 新增错误记录字典
 
     # 遍历输入文件夹及其子文件夹中的所有文件
     for root, _, files in os.walk(input_folder):
@@ -22,11 +23,17 @@ def crop_center_square(input_folder, output_folder):
         image_count[relative_path] = 0  # 初始化计数
 
         for filename in files:
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.avif')):
                 try:
-                    # 打开图片
+                    # 处理包含特殊字符的文件名
+                    safe_filename = filename.split('@')[0]  # 去除@符号后的内容
                     img_path = os.path.join(root, filename)
-                    img = Image.open(img_path)
+                    
+                    # 显式指定AVIF格式（需要pillow-avif-plugin）
+                    if filename.lower().endswith('.avif'):
+                        img = Image.open(img_path).convert('RGB')  # 转换为RGB模式
+                    else:
+                        img = Image.open(img_path)
 
                     # 计算裁剪区域
                     width, height = img.size
@@ -48,13 +55,24 @@ def crop_center_square(input_folder, output_folder):
                     image_count[relative_path] += 1  # 更新计数
                 except Exception as e:
                     print(f'处理文件 {filename} 时出错: {e}')
+                    # 记录错误文件信息
+                    if relative_path not in error_files:
+                        error_files[relative_path] = []
+                    error_files[relative_path].append(f"{filename}: {str(e)}")
             else:
                 print(f'跳过非图片文件: {filename}')
 
     # 汇报每个子文件夹的图片数量
-    print("\n汇报：")
+    print("\n处理结果：")
     for folder, count in image_count.items():
-        print(f'子文件夹 "{folder}" 中有 {count} 张图片。')
+        print(f'子文件夹 "{folder}" - 成功处理 {count} 张图片')
+        # 显示该文件夹的错误文件
+        if folder in error_files and error_files[folder]:
+            print(f'  出错文件：')
+            for error in error_files[folder]:
+                print(f'    × {error}')
+        else:
+            print(f'  无出错文件')
 
 # 使用示例
 input_folder = 'src/assets/image/'  # 输入文件夹路径
