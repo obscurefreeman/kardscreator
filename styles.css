@@ -53,8 +53,8 @@ body {
 
 .card h2 {
     text-align: center;
-    font-weight: bold;
-    margin: 0 0 10px 0;
+    font-size: 40px;
+    margin: 5px 0 0 0;
     position: relative;
     z-index: 2;
     font-family: 'Kards文字复合字体Bold', sans-serif;
@@ -82,14 +82,23 @@ body {
 .card .unit-stats {
     position: absolute;
     bottom: 10px;
-    width: calc(100% - 40px);
+    left: 50%; /* 居中 */
+    transform: translateX(-50%); /* 居中对齐 */
+    color: white;
     display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    font-size: 24px;
-    font-weight: bold;
-    left: 0;
     font-family: 'Kards数字复合字体', sans-serif;
+    font-size: 40px;
+    justify-content: center;
+    gap: 220px; /* 调整数字间距 */
+    z-index: 3;
+}
+
+.card .unit-stats .unit-name {
+    display: none;
+}
+
+.card .unit-stats p {
+    margin: 0 5px;
 }
 
 .card .unit-type {

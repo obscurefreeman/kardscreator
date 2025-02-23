@@ -121,6 +121,12 @@ function spinWheel() {
         airForceImage.style.width = '100%'; // 图片填充整个卡片元素
         card.appendChild(airForceImage);
     }
+
+    // 添加单位类型图标
+    const unitTypeImage = document.createElement('img');
+    unitTypeImage.src = `assets/${cardData.unitType}.png`; // 根据单位类型获取图片
+    unitTypeImage.style.width = '100%'; // 图片填充整个卡片元素
+    card.appendChild(unitTypeImage);
 } 
 
 // 初始化
