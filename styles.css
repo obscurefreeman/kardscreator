@@ -252,10 +252,8 @@ button:active {
     left: 14px;
     right: 14px;
     height: 460px;
-    background-color: #000;
     z-index: 1;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     display: flex;
     justify-content: center;
     align-items: center;
