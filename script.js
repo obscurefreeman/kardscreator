@@ -15,8 +15,22 @@ const config = {
     effects: {
         conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时'],
         conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位'],
-        effects: [`造成${getRandomInt(1, 5)}点伤害`, `获得+${getRandomInt(1, 5)}攻击`, `获得+${getRandomInt(1, 5)}防御`, '无法攻击', '无法攻击敌方总部', '获得守护', '受到的战斗伤害翻倍', '获得免疫', '获得免疫', '与一个敌方单位战斗', '进入前线', '结束该回合', '抽一张牌'],
-        effectTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位', '前线所有单位']
+        effects: [
+            `使$effectTargets获得+${getRandomInt(1, 5)}攻击`,
+            `使$effectTargets获得+${getRandomInt(1, 5)}防御`,
+            `使$effectTargets受到${getRandomInt(1, 5)}点伤害`,
+            `使$effectTargets无法攻击`,
+            `使$effectTargets无法攻击敌方总部`,
+            `使$effectTargets获得守护`,
+            `使$effectTargets受到的战斗伤害翻倍`,
+            `使$effectTargets获得免疫`,
+            `使$effectTargets与一个敌方单位战斗`,
+            `使$effectTargets进入前线`,
+            `使$effectside抽+${getRandomInt(1, 5)}张牌`,
+            `结束该回合`
+        ],
+        effectTargets: ['自身', '指定单位', '相邻单位', '所有友方单位', '所有敌方单位', '前线所有单位'],
+        effectside: ['友方', '敌方']
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
     unitTypes: ['步兵', '坦克', '炮兵', '战斗机', '轰炸机'],
@@ -60,9 +74,16 @@ function generateRandomEffects() {
     for (let i = 0; i < count; i++) {
         const condition = getRandomElement(config.effects.conditions);
         const conditionTarget = getRandomElement(config.effects.conditionTargets);
-        const effect = getRandomElement(config.effects.effects);
+        let effect = getRandomElement(config.effects.effects);
         const effectTarget = getRandomElement(config.effects.effectTargets);
-        effects.push(`当${conditionTarget}${condition}，${effectTarget}${effect}`);
+        const effectSide = getRandomElement(config.effects.effectside);
+        
+        // 替换变量占位符
+        effect = effect
+            .replace(/\$effectTargets/g, effectTarget)
+            .replace(/\$effectside/g, effectSide);
+
+        effects.push(`当${conditionTarget}${condition}，${effect}`);
     }
     return effects.join('；');
 }
