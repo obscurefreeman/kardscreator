@@ -1,6 +1,5 @@
 // 获取所有DOM元素
 const cardElements = {
-    country: document.getElementById('country'),
     cost: document.getElementById('cost'),
     fuel: document.getElementById('fuel'),
     unitType: document.getElementById('unitType'),
@@ -94,7 +93,6 @@ function spinWheel() {
         element.contentEditable = true;
     };
 
-    updateCard(cardElements.country, cardData.country);
     updateCard(cardElements.cost, cardData.cost);
     updateCard(cardElements.fuel, cardData.fuel);
     updateCard(cardElements.unitType, cardData.unitType);
