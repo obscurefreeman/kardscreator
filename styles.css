@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.card {
+    width: 500px;
+    height: 702px;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.card h2 {
+    text-align: center;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+
+.card .cost-fuel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card .card-image {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-color: #ddd;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.card .unit-stats {
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 40px);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 24px;
+    font-weight: bold;
+    left: 0;
+}
+
+.card .unit-type {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card .attributes {
+    text-align: center;
+    font-weight: bold;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.card .effects {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.wheel {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
