@@ -12,7 +12,7 @@ const config = {
     attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', `重甲${getRandomInt(1, 3)}`, '收缴', '动员', '山地', `情报${getRandomInt(1, 3)}`, '流亡'],
     effects: {
         conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时', '触发反制时'],
-        conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意支援阵线单位', '任意受伤单位', `任意{attributes}单位`],
+        conditionTargets: ['此单位', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意支援阵线单位', '任意受伤单位', `任意{attributes}单位`],
         effects: [
             `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}攻击力`,
             `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}防御力`,
@@ -32,7 +32,7 @@ const config = {
             `当{conditionTargets}{conditions}，使{side}总部获得+${getRandomInt(1, 5)}防御力`,
             `当{conditionTargets}{conditions}，结束该回合`
         ],
-        effectTargets: ['自身', '指定单位', '相邻单位', '随机单位', '所有友方单位', '所有敌方单位', '所有前线单位', '所有支援阵线单位', '所有受伤单位', `所有{attributes}单位`],
+        effectTargets: ['此单位', '指定单位', '相邻单位', '随机单位', '所有友方单位', '所有敌方单位', '所有前线单位', '所有支援阵线单位', '所有受伤单位', `所有{attributes}单位`],
         effectside: ['友方', '敌方']
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
@@ -328,22 +328,27 @@ function handleCardLeave() {
 function saveCardAsImage() {
     const card = document.getElementById('card');
     
-    domtoimage.toPng(card, {
-        quality: 0.95,
-        width: card.offsetWidth * 2,
-        height: card.offsetHeight * 2,
-        style: {
-            transform: 'scale(2)',
-            transformOrigin: 'top left'
-        }
-    })
-    .then(dataUrl => {
+    // 设置缩放比例
+    const scale = 2;
+    
+    html2canvas(card, {
+        scale: scale,
+        logging: true,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null
+    }).then(canvas => {
+        // 将canvas转换为图片
+        const imgData = canvas.toDataURL('image/png');
+        
+        // 创建下载链接
         const link = document.createElement('a');
         link.download = 'card.png';
-        link.href = dataUrl;
+        link.href = imgData;
+        
+        // 触发下载
         link.click();
-    })
-    .catch(error => {
+    }).catch(error => {
         console.error('截图失败:', error);
     });
 }
