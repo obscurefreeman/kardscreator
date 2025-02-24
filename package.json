@@ -21,8 +21,6 @@
   "homepage": "https://github.com/obscurefreeman/kardscreator",
   "devDependencies": {
     "@electron-forge/cli": "^7.7.0",
-    "@electron-forge/maker-deb": "^7.7.0",
-    "@electron-forge/maker-rpm": "^7.7.0",
     "@electron-forge/maker-squirrel": "^7.7.0",
     "@electron-forge/maker-zip": "^7.7.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.7.0",
@@ -30,27 +28,27 @@
     "@electron/fuses": "^1.8.0",
     "electron": "^34.2.0"
   },
-  "build": {
-    "icon": "assets/logo.ico",
-    "win": {
-      "target": "nsis",
-      "publisherName": "晦涩弗里曼"
-    }
-  },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1"
   },
   "config": {
     "forge": {
       "packagerConfig": {
+        "asar": true,
         "icon": "assets/logo"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "iconUrl": "https://kardscreator.netlify.app/assets/logo.ico",
-            "setupIcon": "assets/logo.ico"
+            "name": "kardscreator",
+            "setupExe": "Kards随机卡牌生成器安装程序.exe",
+            "setupIcon": "assets/logo.ico",
+            "certificateFile": "",
+            "certificatePassword": "",
+            "noMsi": true,
+            "remoteReleases": "",
+            "remoteToken": ""
           }
         },
         {
@@ -58,16 +56,6 @@
           "platforms": [
             "darwin"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "assets/logo.png"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
