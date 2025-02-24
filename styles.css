@@ -23,6 +23,20 @@ body {
     background-color: #2f2f2f;
     background-image: url('assets/background.jpg');
     background-size: cover;
+    transform-origin: center center;
+    transform: scale(1);
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        transform: scale(0.8);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        transform: scale(0.6);
+    }
 }
 
 .container {
@@ -30,6 +44,10 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    position: relative;
+    left: 0;
+    transform: none;
+    margin: 0 auto;
 }
 
 .card {
