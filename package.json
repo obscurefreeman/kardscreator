@@ -23,6 +23,7 @@
   "homepage": "https://github.com/obscurefreeman/kardscreator",
   "build": {
     "appId": "com.kardscreator.app",
+    "productName": "Kards Creator",
     "win": {
       "icon": "assets/logo.ico",
       "target": [
