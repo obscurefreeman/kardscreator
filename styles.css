@@ -172,8 +172,9 @@ body {
 button {
     flex: 1;
     padding: 15px 25px;
-    font-family: 'Kards文字复合字体Regular', sans-serif;
-    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Kards文字复合字体Bold', sans-serif;
+    font-size: 20px;
     letter-spacing: 1px;
     background: linear-gradient(rgba(255,255,255,0.1), rgba(0,0,0,0.1));
     border: 1px solid rgba(255,255,255,0.2);
