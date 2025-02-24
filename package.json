@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/obscurefreeman/kardscreator/issues"
   },
-  "homepage": "https://github.com/obscurefreeman/kardscreator#readme",
+  "homepage": "https://github.com/obscurefreeman/kardscreator",
   "devDependencies": {
     "electron": "^34.2.0"
   }
