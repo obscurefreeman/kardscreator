@@ -11,13 +11,16 @@
     "url": "git+https://github.com/obscurefreeman/kardscreator.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "晦涩弗里曼",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/obscurefreeman/kardscreator/issues"
   },
   "homepage": "https://github.com/obscurefreeman/kardscreator",
   "devDependencies": {
     "electron": "^34.2.0"
+  },
+  "build": {
+    "icon": "assets/logo.ico"
   }
 }

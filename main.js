@@ -12,7 +12,8 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true
-    }
+    },
+    icon: path.join(__dirname, 'assets/logo.ico')
   })
 
   // 加载你的HTML文件
