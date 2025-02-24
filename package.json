@@ -1,0 +1,23 @@
+{
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "name": "shoot",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obscurefreeman/kardscreator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/obscurefreeman/kardscreator/issues"
+  },
+  "homepage": "https://github.com/obscurefreeman/kardscreator#readme",
+  "devDependencies": {
+    "electron": "^34.2.0"
+  }
+}
