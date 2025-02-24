@@ -228,6 +228,7 @@ function spinWheel() {
     }
 
     const unitTypeImage = document.createElement('img');
+    unitTypeImage.className = 'unit-type-image';
     unitTypeImage.src = `assets/${cardData.unitType}.png`;
     unitTypeImage.style.width = '100%';
     card.insertBefore(unitTypeImage, card.firstChild);
