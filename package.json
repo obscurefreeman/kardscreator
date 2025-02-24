@@ -1,13 +1,15 @@
 {
+  "name": "kardscreator",
+  "version": "1.0.0",
+  "description": "Kards 卡牌制作器 - 创建随机卡牌",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "build": "electron-builder",
+    "dist": "electron-builder --dir"
   },
-  "name": "kardscreator",
-  "version": "1.0.0",
-  "description": "Kards 卡牌制作器 - 创建随机卡牌",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/obscurefreeman/kardscreator.git"
@@ -19,6 +21,25 @@
     "url": "https://github.com/obscurefreeman/kardscreator/issues"
   },
   "homepage": "https://github.com/obscurefreeman/kardscreator",
+  "build": {
+    "appId": "com.kardscreator.app",
+    "win": {
+      "icon": "assets/logo.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
   "devDependencies": {
     "@electron-forge/cli": "^7.7.0",
     "@electron-forge/maker-deb": "^7.7.0",
@@ -28,48 +49,10 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.7.0",
     "@electron-forge/plugin-fuses": "^7.7.0",
     "@electron/fuses": "^1.8.0",
-    "electron": "^34.2.0"
-  },
-  "build": {
-    "icon": "assets/logo.ico",
-    "win": {
-      "target": "nsis",
-      "publisherName": "晦涩弗里曼"
-    }
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "assets/logo"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "iconUrl": "https://kardscreator.netlify.app/assets/logo.ico",
-            "setupIcon": "assets/logo.ico"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "assets/logo.png"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
   }
 }
