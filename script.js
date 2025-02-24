@@ -246,8 +246,25 @@ function init() {
     const buttonContainer = document.createElement('div');
     buttonContainer.className = 'button-container';
     
-    const generateBtn = document.querySelector('button');
+    const generateBtn = document.createElement('button');
     generateBtn.textContent = '生成新卡牌';
+    generateBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const card = document.getElementById('card');
+        const imgs = card.querySelectorAll('img:not([src="assets/模板.png"])');
+        imgs.forEach(img => img.remove());
+        
+        spinWheel();
+        
+        cardElements.attributes.style.display = 'block';
+        cardElements.effects.style.display = 'block';
+        setTimeout(() => {
+            cardElements.attributes.style.display = '';
+            cardElements.effects.style.display = '';
+        }, 0);
+    });
     
     const saveBtn = document.createElement('button');
     saveBtn.className = 'save-btn';
@@ -258,6 +275,10 @@ function init() {
     buttonContainer.appendChild(saveBtn);
     
     document.querySelector('.wheel').appendChild(buttonContainer);
+
+    document.getElementById('minimize-btn').addEventListener('click', minimizeWindow);
+    document.getElementById('maximize-btn').addEventListener('click', maximizeWindow);
+    document.getElementById('close-btn').addEventListener('click', closeWindow);
 
     const card = document.querySelector('.card');
     card.removeEventListener('mousemove', handleCardMove);
@@ -270,21 +291,6 @@ const updateCard = (element, value) => {
     element.textContent = value === '-' ? '' : value;
     element.contentEditable = true;
 };
-
-document.querySelector('button').addEventListener('click', () => {
-    const card = document.getElementById('card');
-    const imgs = card.querySelectorAll('img:not([src="assets/模板.png"])');
-    imgs.forEach(img => img.remove());
-    
-    spinWheel();
-    
-    cardElements.attributes.style.display = 'block';
-    cardElements.effects.style.display = 'block';
-    setTimeout(() => {
-        cardElements.attributes.style.display = '';
-        cardElements.effects.style.display = '';
-    }, 0);
-});
 
 function handleCardMove(e) {
     const card = e.currentTarget;
@@ -342,4 +348,31 @@ function saveCardAsImage() {
     });
 }
 
-window.onload = init;
+window.ipc = {
+    postMessage: (channel) => require('electron').ipcRenderer.send(channel)
+}
+
+window.onload = function() {
+    // 检测是否在Electron环境中
+    const isElectron = typeof require !== 'undefined' && typeof window !== 'undefined' && window.process && window.process.type;
+    
+    // 如果是Electron环境，给body添加electron类
+    if (isElectron) {
+        document.body.classList.add('electron');
+    }
+    
+    init();
+};
+
+// 窗口控制函数
+function minimizeWindow() {
+    window.ipc.postMessage('window-minimize');
+}
+
+function maximizeWindow() {
+    window.ipc.postMessage('window-maximize');
+}
+
+function closeWindow() {
+    window.ipc.postMessage('window-close');
+}

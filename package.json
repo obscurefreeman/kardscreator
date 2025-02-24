@@ -3,7 +3,7 @@
   "scripts": {
     "start": "electron ."
   },
-  "name": "shoot",
+  "name": "kardscreator",
   "version": "1.0.0",
   "description": "",
   "repository": {

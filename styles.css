@@ -13,18 +13,30 @@
     src: url('fonts/Kards文字复合字体Regular.ttf') format('ttf');
 }
 
+html, body {
+    overflow: hidden; /* 禁止页面滚动 */
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Kards文字复合字体Regular', Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
     background-color: #2f2f2f;
     background-image: url('assets/background.jpg');
     background-size: cover;
     transform-origin: center center;
     transform: scale(1);
+    padding-top: 0;
+}
+
+/* 如果是在Electron环境中，添加顶部padding */
+body.electron {
+    padding-top: 30px;
 }
 
 @media screen and (max-width: 768px) {
@@ -353,4 +365,33 @@ img {
     -moz-user-drag: none;
     -o-user-drag: none;
     pointer-events: none;
+}
+
+.titlebar {
+    height: 30px;
+    background: #2d2d2d;
+    -webkit-app-region: drag;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.window-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    -webkit-app-region: no-drag;
+}
+
+.window-controls button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
 }

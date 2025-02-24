@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="titlebar" id="titlebar">
+      <div>Kards 卡牌生成器</div>
+      <div class="window-controls">
+        <button id="minimize-btn">-</button>
+        <button id="maximize-btn">□</button>
+        <button id="close-btn">×</button>
+      </div>
+    </div>
     <div class="container">
         <div class="card" id="card">
             <div class="unit-display-container">
@@ -28,9 +36,18 @@
             </div>
         </div>
         <div class="wheel" id="wheel">
-            <button>点击生成</button>
         </div>
     </div>
+    <script>
+    // 检测是否在Electron环境中
+    const isElectron = typeof require !== 'undefined' && typeof window !== 'undefined' && window.process && window.process.type;
+    
+    // 根据环境显示/隐藏标题栏
+    const titlebar = document.getElementById('titlebar');
+    if (!isElectron) {
+        titlebar.style.display = 'none';
+    }
+    </script>
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 </body>
