@@ -385,7 +385,7 @@ img {
 .window-controls {
     margin-left: auto;
     display: flex;
-    gap: 10px;
+    gap: 8px;
     -webkit-app-region: no-drag;
 }
 
@@ -394,4 +394,11 @@ img {
     border: none;
     color: white;
     cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color 0.2s ease;
 }
