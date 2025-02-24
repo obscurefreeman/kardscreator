@@ -72,10 +72,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 6px 12px 12px rgba(0, 0, 0, 0.4);
     opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: 
+        opacity 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+        transform 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     pointer-events: none;
     z-index: 4;
 }
@@ -101,7 +103,7 @@ body {
 }
 
 .card:hover::before {
-    opacity: 0.6;
+    opacity: 0.3;
     transform: rotateX(7deg) translateY(-6px) scale(1.05);
 }
 
@@ -192,7 +194,7 @@ body {
 
 .card .attributes {
     text-align: center;
-    margin: 10px 0;
+    margin: 2px 0;
     font-size: 20px;
     color: #4e4e49;
     font-weight: bold;

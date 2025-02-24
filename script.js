@@ -12,7 +12,7 @@ const config = {
     attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', `重甲${getRandomInt(1, 3)}`, '收缴', '动员', '山地', `情报${getRandomInt(1, 3)}`, '流亡'],
     effects: {
         conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时', '触发反制时'],
-        conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意受伤单位', `任意{attributes}单位`],
+        conditionTargets: ['自身', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意支援阵线单位', '任意受伤单位', `任意{attributes}单位`],
         effects: [
             `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}攻击力`,
             `当{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}防御力`,
@@ -32,7 +32,7 @@ const config = {
             `当{conditionTargets}{conditions}，使{side}总部获得+${getRandomInt(1, 5)}防御力`,
             `当{conditionTargets}{conditions}，结束该回合`
         ],
-        effectTargets: ['自身', '指定单位', '相邻单位', '随机单位', '所有友方单位', '所有敌方单位', '所有前线单位', '所有受伤单位', `所有{attributes}单位`],
+        effectTargets: ['自身', '指定单位', '相邻单位', '随机单位', '所有友方单位', '所有敌方单位', '所有前线单位', '所有支援阵线单位', '所有受伤单位', `所有{attributes}单位`],
         effectside: ['友方', '敌方']
     },
     countries: ['德国', '苏联', '英国', '美国', '日本', '芬兰', '意大利', '波兰'],
