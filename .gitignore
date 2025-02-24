@@ -19,3 +19,4 @@ npm-debug.log*
 # 忽略环境变量文件
 .env
 .env.local 
+out/
