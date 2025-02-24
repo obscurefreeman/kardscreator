@@ -34,23 +34,6 @@ body {
     padding-top: 0;
 }
 
-/* 如果是在Electron环境中，添加顶部padding */
-body.electron {
-    padding-top: 30px;
-}
-
-@media screen and (max-width: 768px) {
-    body {
-        transform: scale(0.8);
-    }
-}
-
-@media screen and (max-width: 480px) {
-    body {
-        transform: scale(0.6);
-    }
-}
-
 .container {
     display: flex;
     flex-direction: column;
