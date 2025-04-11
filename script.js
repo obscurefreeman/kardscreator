@@ -40,7 +40,7 @@ const config = {
     cost: { min: 1, max: 9 },
     fuel: { min: 0, max: 5 },
     attackDefense: { min: 1, max: 12 },
-    attributesCount: { min: 1, max: 3 },
+    attributesCount: { min: 0, max: 3 },
     effectsCount: { min: 0, max: 2 },
     unitImagePaths: {
         '步兵': 'infantry',
