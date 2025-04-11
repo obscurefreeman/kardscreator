@@ -40,7 +40,7 @@ const config = {
     cost: { min: 1, max: 9 },
     fuel: { min: 0, max: 5 },
     attackDefense: { min: 1, max: 12 },
-    attributesCount: { min: 0, max: 3 },
+    attributesCount: { min: 1, max: 3 },
     effectsCount: { min: 0, max: 2 },
     unitImagePaths: {
         '步兵': 'infantry',
@@ -155,10 +155,10 @@ function spinWheel() {
         const typeFolder = config.unitImagePaths[cardData.unitType];
         
         const imageCounts = {
-            infantry: 87,
-            tank: 27,
-            artillery: 11,
-            plane: 37
+            infantry: 114,
+            tank: 36,
+            artillery: 17,
+            plane: 53
         };
         
         let usedImages = config.unitImageUsage[typeFolder];
