@@ -367,7 +367,7 @@ window.onload = function() {
     }
     
     init();
-};
+}
 
 // 窗口控制函数
 function minimizeWindow() {
@@ -380,4 +380,32 @@ function maximizeWindow() {
 
 function closeWindow() {
     window.ipc.postMessage('window-close');
+}
+
+// 添加窗口大小调整事件监听器
+window.addEventListener('resize', adjustScale);
+
+// 初始调整缩放比例
+adjustScale();
+
+function adjustScale() {
+    const container = document.querySelector('.container');
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    // 设置边距
+    const margin = 20; // 20像素的边距
+
+    // 计算缩放比例，考虑边距
+    const scaleWidth = (windowWidth - margin * 2) / 500; // 500是卡牌的宽度
+    const scaleHeight = (windowHeight - margin * 2) / 889; // 704是卡牌的高度，889是加上按钮的高度
+    const scale = Math.min(scaleWidth, scaleHeight);
+
+    // 设置最大缩放比例
+    const maxScale = 1; // 最大缩放比例为1倍
+    const finalScale = Math.min(scale, maxScale);
+
+    // 应用缩放比例
+    container.style.transform = `scale(${finalScale})`;
+    container.style.margin = `${margin}px auto`; // 设置边距
 }
