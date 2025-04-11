@@ -396,16 +396,19 @@ function adjustScale() {
     // 设置边距
     const margin = 20; // 20像素的边距
 
-    // 计算缩放比例，考虑边距
+    // 获取标题栏的高度
+    const titlebarHeight = document.querySelector('.titlebar').offsetHeight;
+
+    // 计算缩放比例，考虑边距和标题栏高度
     const scaleWidth = (windowWidth - margin * 2) / 500; // 500是卡牌的宽度
-    const scaleHeight = (windowHeight - margin * 2) / 889; // 704是卡牌的高度，889是加上按钮的高度
+    const scaleHeight = (windowHeight - margin * 2 - titlebarHeight) / 889; // 889是加上按钮的高度
     const scale = Math.min(scaleWidth, scaleHeight);
 
     // 设置最大缩放比例
     const maxScale = 1; // 最大缩放比例为1倍
     const finalScale = Math.min(scale, maxScale);
 
-    // 应用缩放比例
+    // 应用缩放比例和边距
     container.style.transform = `scale(${finalScale})`;
-    container.style.margin = `${margin}px auto`; // 设置边距
+    container.style.margin = `${margin + titlebarHeight}px auto ${margin}px`; // 设置顶部和底部边距
 }
