@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -45,17 +45,33 @@ function createWindow() {
   })
 
   // 添加保存图片的 IPC 处理
-  ipcMain.on('save-card-image', (event, dataURL) => {
+  ipcMain.on('save-card-image', (event, { dataURL, cardName }) => {
     const base64Data = dataURL.replace(/^data:image\/png;base64,/, '')
-    const filePath = path.join(app.getPath('pictures'), `kards_card_${Date.now()}.png`)
     
-    fs.writeFile(filePath, base64Data, 'base64', (err) => {
-      if (err) {
-        console.error('保存图片失败:', err)
-        event.reply('save-card-image-reply', { success: false, error: err.message })
+    // 打开文件夹选择对话框
+    dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }).then(result => {
+      if (!result.canceled && result.filePaths.length > 0) {
+        const saveDir = result.filePaths[0]
+        const date = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+        const fileName = `${cardName}_${date}.png`
+        const filePath = path.join(saveDir, fileName)
+        
+        fs.writeFile(filePath, base64Data, 'base64', (err) => {
+          if (err) {
+            console.error('保存图片失败:', err)
+            event.reply('save-card-image-reply', { success: false, error: err.message })
+          } else {
+            event.reply('save-card-image-reply', { success: true, path: filePath })
+          }
+        })
       } else {
-        event.reply('save-card-image-reply', { success: true, path: filePath })
+        event.reply('save-card-image-reply', { success: false, error: '未选择保存目录' })
       }
+    }).catch(err => {
+      console.error('打开文件夹对话框失败:', err)
+      event.reply('save-card-image-reply', { success: false, error: err.message })
     })
   })
 }

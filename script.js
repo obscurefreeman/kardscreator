@@ -333,6 +333,7 @@ function handleCardLeave() {
 
 function saveCardAsImage() {
     const card = document.getElementById('card')
+    const cardName = document.querySelector('.card h2').textContent
     
     // 获取卡牌的尺寸和位置
     const rect = card.getBoundingClientRect()
@@ -356,9 +357,13 @@ window.ipc.on('capture-page-reply', (event, image) => {
     if (image) {
         // 将捕获的图像转换为 Data URL
         const dataURL = image.toDataURL()
+        const cardName = document.querySelector('.card h2').textContent
         
-        // 发送保存图片的请求
-        window.ipc.postMessage('save-card-image', dataURL)
+        // 发送保存图片的请求，包含卡牌名称
+        window.ipc.postMessage('save-card-image', {
+            dataURL: dataURL,
+            cardName: cardName
+        })
     }
 })
 
