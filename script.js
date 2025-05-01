@@ -268,17 +268,15 @@ function init() {
     
     const saveBtn = document.createElement('button');
     saveBtn.className = 'save-btn';
-    saveBtn.textContent = '保存卡牌';
-    saveBtn.addEventListener('click', saveCardAsImage);
+    saveBtn.textContent = '下载正式版';
+    saveBtn.addEventListener('click', () => {
+        window.open('https://obscurefreeman.itch.io/kardscreator', '_blank');
+    });
     
     buttonContainer.appendChild(generateBtn);
     buttonContainer.appendChild(saveBtn);
     
     document.querySelector('.wheel').appendChild(buttonContainer);
-
-    document.getElementById('minimize-btn').addEventListener('click', minimizeWindow);
-    document.getElementById('maximize-btn').addEventListener('click', maximizeWindow);
-    document.getElementById('close-btn').addEventListener('click', closeWindow);
 
     const card = document.querySelector('.card');
     card.removeEventListener('mousemove', handleCardMove);
@@ -325,59 +323,6 @@ function handleCardLeave() {
     });
 }
 
-function saveCardAsImage() {
-    const card = document.getElementById('card');
-    
-    // 设置缩放比例
-    const scale = 2;
-    
-    html2canvas(card, {
-        scale: scale,
-        logging: true,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null
-    }).then(canvas => {
-        // 将canvas转换为图片
-        const imgData = canvas.toDataURL('image/png');
-        
-        // 创建下载链接
-        const link = document.createElement('a');
-        link.download = 'card.png';
-        link.href = imgData;
-        
-        // 触发下载
-        link.click();
-    }).catch(error => {
-        console.error('截图失败:', error);
-    });
-}
-
-window.ipc = {
-    postMessage: (channel) => require('electron').ipcRenderer.send(channel)
-}
-
 window.onload = function() {
-    // 检测是否在Electron环境中
-    const isElectron = typeof require !== 'undefined' && typeof window !== 'undefined' && window.process && window.process.type;
-    
-    // 如果是Electron环境，给body添加electron类
-    if (isElectron) {
-        document.body.classList.add('electron');
-    }
-    
     init();
 };
-
-// 窗口控制函数
-function minimizeWindow() {
-    window.ipc.postMessage('window-minimize');
-}
-
-function maximizeWindow() {
-    window.ipc.postMessage('window-maximize');
-}
-
-function closeWindow() {
-    window.ipc.postMessage('window-close');
-}
