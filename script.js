@@ -332,38 +332,44 @@ function handleCardLeave() {
 }
 
 function saveCardAsImage() {
-    const card = document.getElementById('card');
-    const cardName = document.querySelector('.card h2').textContent;
+    const card = document.getElementById('card')
     
-    // 设置缩放比例
-    const scale = 2;
+    // 获取卡牌的尺寸和位置
+    const rect = card.getBoundingClientRect()
     
-    html2canvas(card, {
-        scale: scale,
-        logging: true,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null
-    }).then(canvas => {
-        // 将canvas转换为图片
-        const imgData = canvas.toDataURL('image/png');
-        
-        // 创建下载链接
-        const link = document.createElement('a');
-        
-        link.download = fileName + '.png';
-        link.href = imgData;
-        
-        // 触发下载
-        link.click();
-    }).catch(error => {
-        console.error('截图失败:', error);
-    });
+    // 使用 Electron 的 webContents.capturePage API
+    window.ipc.postMessage('capture-page', {
+        x: Math.round(rect.left),
+        y: Math.round(rect.top),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height)
+    })
 }
 
 window.ipc = {
-    postMessage: (channel) => require('electron').ipcRenderer.send(channel)
+    postMessage: (channel, data) => require('electron').ipcRenderer.send(channel, data),
+    on: (channel, callback) => require('electron').ipcRenderer.on(channel, callback)
 }
+
+// 监听捕获页面的结果
+window.ipc.on('capture-page-reply', (event, image) => {
+    if (image) {
+        // 将捕获的图像转换为 Data URL
+        const dataURL = image.toDataURL()
+        
+        // 发送保存图片的请求
+        window.ipc.postMessage('save-card-image', dataURL)
+    }
+})
+
+// 监听保存图片的结果
+window.ipc.on('save-card-image-reply', (event, result) => {
+    if (result.success) {
+        alert(`卡牌已保存至: ${result.path}`)
+    } else {
+        alert(`保存失败: ${result.error}`)
+    }
+})
 
 window.onload = function() {
     // 检测是否在Electron环境中

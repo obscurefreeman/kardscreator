@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
+const fs = require('fs')
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -25,6 +26,38 @@ function createWindow() {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize()
   })
   ipcMain.on('window-close', () => mainWindow.close())
+
+  // 添加捕获页面的 IPC 处理
+  ipcMain.on('capture-page', (event, rect) => {
+    const mainWindow = BrowserWindow.getFocusedWindow()
+    
+    mainWindow.webContents.capturePage({
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height
+    }).then(image => {
+      event.reply('capture-page-reply', image)
+    }).catch(err => {
+      console.error('捕获页面失败:', err)
+      event.reply('capture-page-reply', null)
+    })
+  })
+
+  // 添加保存图片的 IPC 处理
+  ipcMain.on('save-card-image', (event, dataURL) => {
+    const base64Data = dataURL.replace(/^data:image\/png;base64,/, '')
+    const filePath = path.join(app.getPath('pictures'), `kards_card_${Date.now()}.png`)
+    
+    fs.writeFile(filePath, base64Data, 'base64', (err) => {
+      if (err) {
+        console.error('保存图片失败:', err)
+        event.reply('save-card-image-reply', { success: false, error: err.message })
+      } else {
+        event.reply('save-card-image-reply', { success: true, path: filePath })
+      }
+    })
+  })
 }
 
 app.whenReady().then(() => {
