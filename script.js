@@ -367,15 +367,6 @@ window.ipc.on('capture-page-reply', (event, image) => {
     }
 })
 
-// 监听保存图片的结果
-window.ipc.on('save-card-image-reply', (event, result) => {
-    if (result.success) {
-        alert(`卡牌已保存至: ${result.path}`)
-    } else {
-        alert(`保存失败: ${result.error}`)
-    }
-})
-
 window.onload = function() {
     // 检测是否在Electron环境中
     const isElectron = typeof require !== 'undefined' && typeof window !== 'undefined' && window.process && window.process.type;
