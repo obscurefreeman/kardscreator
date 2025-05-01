@@ -48,15 +48,16 @@ function createWindow() {
   ipcMain.on('save-card-image', (event, { dataURL, cardName }) => {
     const base64Data = dataURL.replace(/^data:image\/png;base64,/, '')
     
-    // 打开文件夹选择对话框
-    dialog.showOpenDialog({
-      properties: ['openDirectory']
+    // 使用保存文件对话框
+    dialog.showSaveDialog({
+      title: '保存卡片图片',
+      defaultPath: `${cardName}_${Date.now()}.png`,
+      filters: [
+        { name: 'PNG Images', extensions: ['png'] }
+      ]
     }).then(result => {
-      if (!result.canceled && result.filePaths.length > 0) {
-        const saveDir = result.filePaths[0]
-        const date = new Date().toISOString().slice(0, 10).replace(/-/g, '')
-        const fileName = `${cardName}_${date}.png`
-        const filePath = path.join(saveDir, fileName)
+      if (!result.canceled && result.filePath) {
+        const filePath = result.filePath
         
         fs.writeFile(filePath, base64Data, 'base64', (err) => {
           if (err) {
@@ -67,10 +68,10 @@ function createWindow() {
           }
         })
       } else {
-        event.reply('save-card-image-reply', { success: false, error: '未选择保存目录' })
+        event.reply('save-card-image-reply', { success: false, error: '取消保存' })
       }
     }).catch(err => {
-      console.error('打开文件夹对话框失败:', err)
+      console.error('保存文件对话框失败:', err)
       event.reply('save-card-image-reply', { success: false, error: err.message })
     })
   })
