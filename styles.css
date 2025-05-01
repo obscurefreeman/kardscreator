@@ -43,7 +43,7 @@ body {
     left: 0;
     transform: none;
     margin: 0 auto;
-    transform: scale(0.7);
+    transform: scale(0.6);
 }
 
 .card {
@@ -349,4 +349,19 @@ img {
     -moz-user-drag: none;
     -o-user-drag: none;
     pointer-events: none;
+}
+
+.download-prompt {
+    font-size: 20px;
+    color: #999;
+    text-align: center;
+    font-family: 'Kards文字复合字体Regular', sans-serif;
+    animation: pulse 2s infinite;
+    opacity: 0.8;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0.8; }
 }
