@@ -333,6 +333,7 @@ function handleCardLeave() {
 
 function saveCardAsImage() {
     const card = document.getElementById('card');
+    const cardName = document.querySelector('.card h2').textContent;
     
     // 设置缩放比例
     const scale = 2;
@@ -349,7 +350,8 @@ function saveCardAsImage() {
         
         // 创建下载链接
         const link = document.createElement('a');
-        link.download = 'card.png';
+        
+        link.download = fileName + '.png';
         link.href = imgData;
         
         // 触发下载
