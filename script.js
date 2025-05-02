@@ -11,8 +11,8 @@ const cardElements = {
 const config = {
     attributes: ['闪击', '守护', '烟幕', '奋战', '伏击', '冲击', `重甲${getRandomInt(1, 3)}`, '收缴', '动员', '山地', `情报${getRandomInt(1, 3)}`, '流亡'],
     effects: {
-        conditions: ['攻击时', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时', '触发反制时', '升为老兵'],
-        conditionTargets: ['此单位', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意支援阵线单位', '任意受伤单位', `任意{attributes}单位`],
+        conditions: ['攻击时', '交战并存活后', '获得攻击力时', '获得防御力时', '被攻击时', '部署时', '被消灭时', '移动时', '被压制时', '被抑制时', '成为指令目标时', '攻击比自己攻击力更高的目标时', '触发反制时', '升为老兵'],
+        conditionTargets: ['本单位', '指定单位', '相邻单位', '任意友方单位', '任意敌方单位', '任意前线单位', '任意支援阵线单位', '任意受伤单位', `任意{attributes}单位`],
         effects: [
             `{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}攻击力`,
             `{conditionTargets}{conditions}，使{target}获得+${getRandomInt(1, 5)}防御力`,
