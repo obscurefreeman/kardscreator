@@ -1,6 +1,6 @@
 {
   "name": "kardscreator",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Kards 卡牌制作器 - 创建随机卡牌",
   "main": "main.js",
   "scripts": {
