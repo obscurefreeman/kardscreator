@@ -23,30 +23,41 @@ const config = {
             `{conditionTargets}{conditions}，使{target}获得守护`,
             `{conditionTargets}{conditions}，使{target}受到的战斗伤害翻倍`,
             `{conditionTargets}{conditions}，使{target}与一个敌方单位战斗`,
-            `{conditionTargets}{conditions}，使{target}进入前线，如果可能`,
-            `{conditionTargets}{conditions}，使{target}返回其所有者手牌`,
+            `{conditionTargets}{conditions}，将{target}移至前线，如果可能`,
+            `{conditionTargets}{conditions}，将{target}返回其所有者手牌`,
             `{conditionTargets}{conditions}，使{target}也算做坦克`,
             `{conditionTargets}{conditions}，使{target}获得{attributes}`,
             `{conditionTargets}{conditions}，抽一张{attributes}单位`,
             `{conditionTargets}{conditions}，使{target}行动花费<b>+${getRandomInt(1, 5)}</b>`,
             `{conditionTargets}{conditions}，消灭{target}`,
+            `{conditionTargets}{conditions}，控制{target}`,
+            `{conditionTargets}{conditions}，使{target}撤退`,
+            `{conditionTargets}{conditions}，造成<b>${getRandomInt(1, 5)}</b>点伤害，随机分配至所有敌方目标`,
+            `{conditionTargets}{conditions}，将{target}的复制加入手牌`,
             `{conditionTargets}{conditions}，使{side}抽<b>${getRandomInt(1, 5)}</b>张牌`,
             `{conditionTargets}{conditions}，{side}需要选择并弃掉<b>${getRandomInt(1, 3)}</b>张牌`,
+            `{conditionTargets}{conditions}，{side}随机弃掉花费不大于<b>${getRandomInt(1, 5)}</b>的<b>${getRandomInt(1, 3)}</b>张牌`,
+            `{conditionTargets}{conditions}，{side}手牌花费增加<b>${getRandomInt(1, 3)}</b>`,
             `{conditionTargets}{conditions}，使{side}总部获得<b>+${getRandomInt(1, 5)}</b>防御力`,
             `{conditionTargets}{conditions}，对{side}总部造成<b>${getRandomInt(1, 5)}</b>点伤害`,
+            `{conditionTargets}{conditions}，{side}额外获得<b>${getRandomInt(1, 3)}</b>个指挥点槽`,
+            `{conditionTargets}{conditions}，将<b>${getRandomInt(1, 3)}</b>张“抵抗”加入{side}手牌`,
+            `{conditionTargets}{conditions}，将<b>${getRandomInt(1, 3)}</b>张“激怒”加入{side}手牌`,
             `{conditionTargets}{conditions}，结束该回合`,
+            `{target}能在同一回合移动并攻击`,
             `{side}总部获得防御力时，{target}获得等量攻击力`,
             `{side}{attributes}单位受到的战斗伤害<b>-${getRandomInt(1, 5)}</b>`,
             `{side}{attributes}单位受到的指令伤害<b>-${getRandomInt(1, 5)}</b>`,
-            `{side}部署无法触发`,
-            `{side}亡计无法触发`,
-            `{side}部署触发两次`,
-            `{side}亡计触发两次`,
+            `{side}单位部署无法触发`,
+            `{side}单位亡计无法触发`,
             `{side}{attributes}单位具有<b>+${getRandomInt(1, 5)}</b>攻击力`,
             `每回合，{side}只能使用至多1张指令`,
+            `每回合，{side}首次部署{attributes}单位时，获得<b>${getRandomInt(1, 3)}</b>个指挥点`,
             `{side}回合结束时，若友方总部防御力大于敌方总部，对{side}总部造成<b>${getRandomInt(1, 5)}</b>点伤害`,
             `{side}使用指令时，对{side}总部造成等同于其花费的伤害`,
             `无法攻击敌方总部`,
+            `消灭受到本单位对战伤害的单位`,
+            `{side}使用的第一张手牌花费为<b>${getRandomInt(1, 10)}</b>`,
             `{conditionTargets}攻击时，溢出的伤害转移至{side}总部`
         ],
         effectTargets: ['本单位', '指定单位', '相邻单位', '随机单位', '所有友方单位', '所有敌方单位', '所有前线单位', '所有支援阵线单位', '所有受伤单位', `所有{attributes}单位`],
@@ -158,6 +169,9 @@ function generateRandomEffects() {
             .replace(/受伤/g, '<b>受伤</b>')
             .replace(/支援阵线/g, '<b>支援阵线</b>')
             .replace(/前线/g, '<b>前线</b>')
+            .replace(/撤退/g, '<b>撤退</b>')
+            .replace(/抵抗/g, '<b>抵抗</b>')
+            .replace(/激怒/g, '<b>激怒</b>')
             .replace(/相邻/g, '<b>相邻</b>')
             .replace(/随机/g, '<b>随机</b>')
             .replace(/指定/g, '<b>指定</b>')
@@ -168,15 +182,15 @@ function generateRandomEffects() {
             .replace(/奋战/g, '<b>奋战</b>')
             .replace(/伏击/g, '<b>伏击</b>')
             .replace(/冲击/g, '<b>冲击</b>')
-            .replace(/重甲1/g, '<b>重甲1</b>')
-            .replace(/重甲2/g, '<b>重甲2</b>')
-            .replace(/重甲3/g, '<b>重甲3</b>')
+            .replace(/重甲1/g, '<b>重甲</b>')
+            .replace(/重甲2/g, '<b>重甲</b>')
+            .replace(/重甲3/g, '<b>重甲</b>')
             .replace(/收缴/g, '<b>收缴</b>')
             .replace(/动员/g, '<b>动员</b>')
             .replace(/山地/g, '<b>山地</b>')
-            .replace(/情报1/g, '<b>情报1</b>')
-            .replace(/情报2/g, '<b>情报2</b>')
-            .replace(/情报3/g, '<b>情报3</b>')
+            .replace(/情报1/g, '<b>情报</b>')
+            .replace(/情报2/g, '<b>情报</b>')
+            .replace(/情报3/g, '<b>情报</b>')
             .replace(/流亡/g, '<b>流亡</b>')
             .replace(/坦克/g, '<b>坦克</b>')
             .replace(/步兵/g, '<b>步兵</b>')
